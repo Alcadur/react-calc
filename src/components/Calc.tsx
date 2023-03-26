@@ -1,3 +1,4 @@
+import { NumericBoard } from './NumericBoard';
 import { CalcInput } from './CalcInput';
 import { createContext, Dispatch, SetStateAction, useState } from 'react';
 import style from './Calc.module.css';
@@ -25,6 +26,10 @@ export function Calc() {
     return (
         <CalcContext.Provider value={contextValue}>
             <CalcInput className={style.input} />
+
+            <div className={style.boards}>
+                <NumericBoard />
+            </div>
         </CalcContext.Provider>
     );
 }
