@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import { RootState } from './store';
+import { validateInput } from '../helopers/inputHelper';
 import { evaluate } from 'mathjs';
 
 interface ExpressionState {
@@ -34,13 +35,22 @@ const expressionSlice = createSlice({
             state.current = '';
         },
         setCurrent(state, { payload }: PayloadAction<CurrentExpressionSetPayload>) {
-            state.current = payload.updatedValue;
+            state.wasUpdated = false;
+
+            if (validateInput(payload)) {
+                state.current = payload.updatedValue;
+                state.wasUpdated = true;
+            }
         },
         appendToCurrent(state, { payload }: PayloadAction<CurrentExpressionAppendPayload>) {
             const { current } = state;
             const { newInput } = payload;
-
-            state.current = `${current}${newInput}`;
+            if (validateInput({
+                currentValue: current,
+                newInput
+            })) {
+                state.current = `${current}${newInput}`;
+            }
         },
         evaluate(state) {
             state.history.unshift(state.current);
