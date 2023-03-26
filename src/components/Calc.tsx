@@ -2,6 +2,7 @@ import { NumericBoard } from './NumericBoard';
 import { CalcInput } from './CalcInput';
 import { createContext, Dispatch, SetStateAction, useState } from 'react';
 import style from './Calc.module.css';
+import { OperatorsBoard } from './OperatorsBoard';
 
 interface ContextType {
     lastPressedButton: string
@@ -29,6 +30,7 @@ export function Calc() {
 
             <div className={style.boards}>
                 <NumericBoard />
+                <OperatorsBoard />
             </div>
         </CalcContext.Provider>
     );
