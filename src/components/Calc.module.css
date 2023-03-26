@@ -1,3 +1,8 @@
+.calcWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
 .input {
     margin-bottom: 10px;
 }

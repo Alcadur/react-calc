@@ -26,14 +26,16 @@ export function Calc() {
     };
 
     return (
-        <CalcContext.Provider value={contextValue}>
-            <CalcInput className={style.input} />
+        <div className={style.calcWrapper}>
+            <CalcContext.Provider value={contextValue}>
+                <CalcInput className={style.input} />
 
-            <div className={style.boards}>
-                <ExtraBoard />
-                <NumericBoard />
-                <OperatorsBoard />
-            </div>
-        </CalcContext.Provider>
+                <div className={style.boards}>
+                    <ExtraBoard />
+                    <NumericBoard />
+                    <OperatorsBoard />
+                </div>
+            </CalcContext.Provider>
+        </div>
     );
 }
