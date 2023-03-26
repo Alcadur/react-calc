@@ -1,4 +1,6 @@
+import { CalcInput } from './CalcInput';
 import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import style from './Calc.module.css';
 
 interface ContextType {
     lastPressedButton: string
@@ -22,7 +24,7 @@ export function Calc() {
 
     return (
         <CalcContext.Provider value={contextValue}>
-
+            <CalcInput className={style.input} />
         </CalcContext.Provider>
     );
 }
