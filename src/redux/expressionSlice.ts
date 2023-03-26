@@ -5,11 +5,13 @@ import { evaluate } from 'mathjs';
 
 interface ExpressionState {
     current: string,
+    wasUpdated: boolean,
     history: Array<string>
 }
 
 const initialState: ExpressionState = {
     current: '',
+    wasUpdated: false,
     history: []
 };
 
@@ -56,5 +58,6 @@ export const {
 } = expressionSlice.actions;
 
 export const useExpressionCurrentSelector = () => useSelector((store: RootState) => store.expression.current);
+export const useExpressionWasUpdatedSelector = () => useSelector((store: RootState) => store.expression.wasUpdated);
 
 export default expressionSlice.reducer;
