@@ -6,12 +6,14 @@ import { evaluate } from 'mathjs';
 
 export interface ExpressionState {
     current: string,
+    lastUpdatedPosition: number
     wasUpdated: boolean,
     history: Array<string>
 }
 
 const initialState: ExpressionState = {
     current: '',
+    lastUpdatedPosition: 1,
     wasUpdated: false,
     history: []
 };
@@ -23,7 +25,7 @@ type CurrentExpressionSetPayload = {
     inputPosition?: number | null,
 }
 
-type CurrentExpressionAppendPayload = {
+type CurrentExpressionAddPayload = {
     newInput: string
 }
 
@@ -39,18 +41,25 @@ const expressionSlice = createSlice({
 
             if (validateInput(payload)) {
                 state.current = payload.updatedValue;
+                state.lastUpdatedPosition = payload.inputPosition!;
                 state.wasUpdated = true;
             }
         },
-        appendToCurrent(state, { payload }: PayloadAction<CurrentExpressionAppendPayload>) {
-            const { current } = state;
+        addToCurrent(state, { payload }: PayloadAction<CurrentExpressionAddPayload>) {
+            const { current, lastUpdatedPosition } = state;
             const { newInput } = payload;
+
             if (validateInput({
                 currentValue: current,
-                newInput
+                newInput,
+                inputPosition: lastUpdatedPosition
             })) {
-                state.current = `${current}${newInput}`;
+                state.current = `${current.substring(0, lastUpdatedPosition-1)}${newInput}${current.substring(lastUpdatedPosition-1)}`;
+                state.lastUpdatedPosition = state.lastUpdatedPosition + newInput.length;
             }
+        },
+        setLastUpdatedPosition(state, { payload }: PayloadAction<number>) {
+            state.lastUpdatedPosition = payload
         },
         evaluate(state) {
             state.history.unshift(state.current);
@@ -62,12 +71,14 @@ const expressionSlice = createSlice({
 
 export const {
     setCurrent: setCurrentExpression,
-    appendToCurrent: appendToCurrentExpression,
+    addToCurrent: addToCurrentExpression,
     clearExpression: clearCurrentExpression,
-    evaluate: evaluateCurrentExpression
+    evaluate: evaluateCurrentExpression,
+    setLastUpdatedPosition: setExpressionLastUpdatedPosition
 } = expressionSlice.actions;
 
 export const useExpressionCurrentSelector = () => useSelector((store: RootState) => store.expression.current);
 export const useExpressionWasUpdatedSelector = () => useSelector((store: RootState) => store.expression.wasUpdated);
+export const useExpressionLastUpdatedPositionSelector = () => useSelector((store: RootState) => store.expression.lastUpdatedPosition);
 
 export default expressionSlice.reducer;

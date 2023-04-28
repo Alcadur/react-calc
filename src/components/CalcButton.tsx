@@ -2,7 +2,7 @@ import { Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState } 
 import { CalcContext } from './Calc';
 import styles from './CalcButton.module.css';
 import { useDispatch } from 'react-redux';
-import { appendToCurrentExpression } from '../redux/expressionSlice';
+import { addToCurrentExpression } from '../redux/expressionSlice';
 
 type propsTypes = {
     className?: string,
@@ -23,7 +23,7 @@ export function CalcButton({ className = '', children, onClick }: propsTypes) {
     }
 
     function appendNumber() {
-        dispatch(appendToCurrentExpression({ newInput: children!.toString() }));
+        dispatch(addToCurrentExpression({ newInput: children!.toString() }));
     }
 
     onClick ??= appendNumber;

@@ -1,6 +1,6 @@
 import { CalcButton } from './CalcButton';
 import style from './OperatorsBoard.module.css';
-import { appendToCurrentExpression, evaluateCurrentExpression } from '../redux/expressionSlice';
+import { addToCurrentExpression, evaluateCurrentExpression } from '../redux/expressionSlice';
 import { useDispatch } from 'react-redux';
 
 export const printableOperators = ['+', '-', '*', '/', '^', 'sqrt'];
@@ -25,7 +25,7 @@ export function OperatorsBoard() {
     }
 
     function insertSqrtWithOpeningBrackets() {
-        dispatch(appendToCurrentExpression({ newInput: 'sqrt(' }));
+        dispatch(addToCurrentExpression({ newInput: 'sqrt(' }));
     }
 
     return (

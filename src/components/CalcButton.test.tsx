@@ -8,7 +8,7 @@ import { RootState } from '../redux/store';
 describe('CalcButton', function () {
     describe('when user click on a button', function () {
         test('should update store value', async function () {
-            const initState = { expression: { current: '333' } } as RootState;
+            const initState = { expression: { current: '333', lastUpdatedPosition: 4 } } as RootState;
 
             const { store, getByText } = renderWithProviders(<CalcButton>1</CalcButton>, {
                 initState

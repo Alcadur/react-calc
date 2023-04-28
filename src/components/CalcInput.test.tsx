@@ -29,7 +29,7 @@ describe('CalcInput', function () {
 
         await userEvent.type(input, '0', { initialSelectionStart: 2, initialSelectionEnd: 4 });
 
-        expect(store.getState().expression.current).toEqual('102+21');
+        expect(store.getState().expression.current).toEqual('120+21');
     });
 
     describe('when user enter character', function () {

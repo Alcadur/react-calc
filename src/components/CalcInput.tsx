@@ -13,6 +13,7 @@ import { CalcContext } from './Calc';
 import { useDispatch } from 'react-redux';
 import {
     setCurrentExpression,
+    setExpressionLastUpdatedPosition,
     useExpressionCurrentSelector,
     useExpressionWasUpdatedSelector
 } from '../redux/expressionSlice';
@@ -28,7 +29,7 @@ export function CalcInput({ className }: PropsTypes) {
     const [shouldUpdateInputPosition, refreshInputPosition] = useReducer((x) => !x, false);
     const dispatch = useDispatch();
     const inputRef: MutableRefObject<HTMLInputElement | null> = useRef(null);
-    const [inputPosition, setInputPosition] = useState(() => 1);
+    const [inputPosition, setInputPosition] = useState(() => 0);
 
     useSelectionRangeUpdate(inputRef.current, inputPosition, inputWasUpdated, shouldUpdateInputPosition);
 
@@ -59,10 +60,13 @@ export function CalcInput({ className }: PropsTypes) {
     function selectUpdateResolver(event: SyntheticEvent<HTMLInputElement>) {
         const { type } = event.nativeEvent;
         const { selectionStart, selectionEnd } = event.currentTarget;
+        // ChangeEvent starts counting from 1 and SyntheticEvent treats it like an array and the first index is 0
+        const selectionStartPosition = selectionStart! + 1;
+
+        dispatch(setExpressionLastUpdatedPosition(selectionStartPosition));
 
         if (selectionStart != selectionEnd) {
-            setInputPosition(selectionStart!);
-            return refreshInputPosition()
+            inputRef.current!.setSelectionRange(selectionStart, selectionStart);
         }
 
         if (type === 'mouseup') {
