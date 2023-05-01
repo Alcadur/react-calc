@@ -18,7 +18,7 @@ const initialState: ExpressionState = {
     history: []
 };
 
-type CurrentExpressionSetPayload = {
+type CurrentExpressionUpdatePayload = {
     currentValue: string,
     updatedValue: string,
     newInput: string | null,
@@ -36,7 +36,7 @@ const expressionSlice = createSlice({
         clearExpression(state) {
             state.current = '';
         },
-        setCurrent(state, { payload }: PayloadAction<CurrentExpressionSetPayload>) {
+        updateCurrent(state, { payload }: PayloadAction<CurrentExpressionUpdatePayload>) {
             state.wasUpdated = false;
 
             if (validateInput(payload)) {
@@ -70,7 +70,7 @@ const expressionSlice = createSlice({
 });
 
 export const {
-    setCurrent: setCurrentExpression,
+    updateCurrent: updateCurrentExpression,
     addToCurrent: addToCurrentExpression,
     clearExpression: clearCurrentExpression,
     evaluate: evaluateCurrentExpression,

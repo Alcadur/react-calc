@@ -12,7 +12,7 @@ import {
 import { CalcContext } from './Calc';
 import { useDispatch } from 'react-redux';
 import {
-    setCurrentExpression,
+    updateCurrentExpression,
     setExpressionLastUpdatedPosition,
     useExpressionCurrentSelector,
     useExpressionWasUpdatedSelector
@@ -49,7 +49,7 @@ export function CalcInput({ className }: PropsTypes) {
 
         refreshInputPosition();
 
-        await dispatch(setCurrentExpression({
+        await dispatch(updateCurrentExpression({
             currentValue: inputValue,
             updatedValue: value,
             newInput: pressedButton,
