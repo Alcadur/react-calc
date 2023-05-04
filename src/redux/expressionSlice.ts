@@ -8,7 +8,12 @@ export interface ExpressionState {
     current: string,
     lastUpdatedPosition: number
     wasUpdated: boolean,
-    history: Array<string>
+    history: Array<HistoryRow>
+}
+
+export type HistoryRow = {
+    id: string,
+    value: string,
 }
 
 const initialState: ExpressionState = {
@@ -35,6 +40,7 @@ const expressionSlice = createSlice({
     reducers: {
         clearExpression(state) {
             state.current = '';
+            state.lastUpdatedPosition = 1;
         },
         updateCurrent(state, { payload }: PayloadAction<CurrentExpressionUpdatePayload>) {
             state.wasUpdated = false;
@@ -45,6 +51,10 @@ const expressionSlice = createSlice({
                 state.wasUpdated = true;
             }
         },
+        setExpression(state, { payload }: { payload: string }) {
+            state.current = payload;
+            state.lastUpdatedPosition = payload.length + 1;
+        },
         addToCurrent(state, { payload }: PayloadAction<CurrentExpressionAddPayload>) {
             const { current, lastUpdatedPosition } = state;
             const { newInput } = payload;
@@ -54,17 +64,19 @@ const expressionSlice = createSlice({
                 newInput,
                 inputPosition: lastUpdatedPosition
             })) {
-                state.current = `${current.substring(0, lastUpdatedPosition-1)}${newInput}${current.substring(lastUpdatedPosition-1)}`;
+                state.current = `${current.substring(0, lastUpdatedPosition - 1)}${newInput}${current.substring(lastUpdatedPosition - 1)}`;
                 state.lastUpdatedPosition = state.lastUpdatedPosition + newInput.length;
             }
         },
         setLastUpdatedPosition(state, { payload }: PayloadAction<number>) {
-            state.lastUpdatedPosition = payload
+            state.lastUpdatedPosition = payload;
         },
         evaluate(state) {
-            state.history.unshift(state.current);
+            const beforeEvaluate = state.current;
             state.current = evaluate(state.current).toString();
-            state.history.unshift(state.current);
+            if (beforeEvaluate !== state.current) {
+                state.history.unshift({ id: crypto.randomUUID().toString(), value: beforeEvaluate });
+            }
         }
     }
 });
@@ -74,11 +86,13 @@ export const {
     addToCurrent: addToCurrentExpression,
     clearExpression: clearCurrentExpression,
     evaluate: evaluateCurrentExpression,
-    setLastUpdatedPosition: setExpressionLastUpdatedPosition
+    setLastUpdatedPosition: setExpressionLastUpdatedPosition,
+    setExpression: setCurrentExpression
 } = expressionSlice.actions;
 
 export const useExpressionCurrentSelector = () => useSelector((store: RootState) => store.expression.current);
 export const useExpressionWasUpdatedSelector = () => useSelector((store: RootState) => store.expression.wasUpdated);
 export const useExpressionLastUpdatedPositionSelector = () => useSelector((store: RootState) => store.expression.lastUpdatedPosition);
+export const useHistorySelector = () => useSelector((store: RootState) => store.expression.history);
 
 export default expressionSlice.reducer;

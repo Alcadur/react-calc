@@ -1,0 +1,61 @@
+.historyList {
+    margin: 0;
+    padding: 0;
+    overflow: hidden auto;
+    list-style: none;
+    text-align: start;
+    border: 1px solid rgba(255, 255, 255, 0.87);
+    background-color: #1a1a1a;
+    border-radius: 10px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.historyList::-webkit-scrollbar {
+    display: none;
+}
+
+.historyElement {
+    --transition-duration: .25s;
+    position: relative;
+    overflow: visible;
+    padding: 5px;
+    cursor: pointer;
+}
+
+
+.historyElement:before,
+.historyElement:after {
+    content: '';
+    display: block;
+    height: 50%;
+    width: 0;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 20px 5px rgba(255, 255, 255, 0.87);
+}
+
+.historyElement:before {
+    will-change: left;
+    left: -20px;
+    transform: translate(-100%, -50%);
+    transition: left linear var(--transition-duration);
+}
+
+.historyElement:after {
+    will-change: right;
+    right: -20px;
+    transform: translate(100%, -50%);
+    transition: right linear var(--transition-duration);
+}
+
+
+.historyElement:hover:before {
+    left: 0;
+}
+
+.historyElement:hover:after {
+    right: 0;
+}

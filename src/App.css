@@ -4,3 +4,13 @@
   padding: 2rem;
   text-align: center;
 }
+
+.App {
+  display: grid;
+  grid-template-columns: 1fr 150px;
+  grid-template-rows: 230px;
+}
+
+.history-panel {
+  margin-left: 10px;
+}
